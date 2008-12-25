@@ -1,0 +1,58 @@
+{% extends "admin/layout.html" %}
+{% block title %}{{ _("New Page") }}{% endblock %}
+{% block contents %}
+  <h1>{{ _("New Page") }}</h1>
+  <form action="" method="post">
+    <div class="formbox">
+      <h3>{{ _("Title") }}</h3>
+      {{ h.input_field('title', form.title, size=40) }}
+    </div>
+    <div class="formbox">
+      <h3>{{ _("Key") }}</h3>
+      {{ h.input_field('key', form.key, size=25) }}<br>
+      <small>{% trans %}
+        The key is used to build the url. If no key is given it's just the title-slug.
+      {% endtrans %}</small>
+    </div>
+    <div class="formbox">
+      <h3>{{ _("Content") }}</h3>
+      {{ h.textarea('text', form.text, rows=20) }}
+    </div>
+    <div class="formbox toggleable collapsed">
+      <h3>{{ _("Parser") }}</h3>
+      <select name="parser">{% for parser_id, name in parsers %}
+        <option value="{{ parser_id|e }}"{% if parser_id == form.parser
+          %} selected{% endif %}>{{ name|e }}</option>
+      {%- endfor %}</select>
+    </div>
+    <div class="formbox toggleable collapsed">
+      <h3>{{ _("Parent Page") }}</h3>
+      <em>This is the parent page</em>
+      <select name="parent_id">
+      {% for page_id, page_title in all_pages %}
+        <option value="{{ page_id|e }}"{%- if page_id == form.parent_id %} selected{% endif %}>
+          {{ page_title|e }}
+        </option>
+      {%- endfor %}
+      </select>
+    </div>
+    <div class="formbox toggleable collapsed">
+      <h3>{{ _("Position") }}</h3>
+      <em>This is the position the link is shown in the navigation widget</em><br>
+      {{ h.input_field('navigation_pos', form.navigation_pos, size=3) }}
+    </div>
+    {% if not new_page %}
+      <p class="preview">
+        <a href="{{ url_for(page) }}">{{ _("View Page") }}</a>
+      </p>
+    {% endif %}
+    <div class="actions">
+      {{ csrf_protector }}
+      <input type="submit" name="save" value="{{ _('Save') }}">
+      {%- if not new_page %}
+        <input type="submit" name="delete" value="{{ _('Delete') }}">
+      {%- endif %}
+      <input type="submit" name="cancel" value="{{ _('Cancel') }}">
+    </div>
+  </form>
+{% endblock %}

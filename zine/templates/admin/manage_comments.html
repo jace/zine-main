@@ -1,0 +1,39 @@
+{% extends "admin/layout.html" %}
+{% from 'admin/_comment.html' import render_comment %}
+{% block title %}{{ comments_title|striptags }}{% endblock %}
+{% block contents %}
+  <h1>{{ comments_title }}</h1>
+  {% call form() %}
+    <ul class="comments">
+    {%- for comment in form.comments %}
+      <li class="comment {{ loop.cycle('odd', 'even') }}{{ ' blocked'
+        if comment.blocked else '' }}">
+        {{ form.selected_comments[comment.id](class='mark') }}
+        {{ render_comment(comment) }}
+      </li>
+    {%- else %}
+      <li>{{ _("No comments.") }}</li>
+    {%- endfor %}
+    </ul>
+    <div class="actions">
+      <input type="submit" name="approve" value="{{ _('Approve') }}">
+      <input type="submit" name="delete" value="{{ _('Delete') }}">
+    </div>
+    <script type="text/javascript">
+      $(function() {
+        $('<input type="button" value="{{ _('Toggle selection') }}">')
+          .click(function() {
+            $('input.mark').each(function() {
+              this.checked = !this.checked;
+            });
+          })
+          .appendTo('div.actions');
+      });
+    </script>
+    {%- if pagination.necessary %}
+    <div class="pagination">
+      {{ pagination.generate() }}
+    </div>
+    {%- endif %}
+  {% endcall %}
+{% endblock %}

@@ -1,0 +1,11 @@
+{% extends 'widgets/base.html' %}
+{% block title %}{{ _('Latest Posts') }}{% endblock %}
+{% block body %}
+  {%- if widget.posts %}
+  <ul>
+  {%- for item in widget.posts %}
+    <li><a href="{{ url_for(item)|e }}">{{ item.title|e }}</a></li>
+  {%- endfor %}
+  </ul>
+  {%- endif %}
+{% endblock %}

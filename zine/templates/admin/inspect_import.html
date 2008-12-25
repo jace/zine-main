@@ -1,0 +1,78 @@
+{% extends "admin/layout.html" %}
+{% block title %}{{ _("Inspect Import") }}{% endblock %}
+{% block contents %}
+  <h1>{{ _("Inspect Import") }}</h1>
+  <p>{% trans %}
+    Here you can now inspect the imported data and select the data you want
+    to import into the database.
+  {% endtrans %}</p>
+  {% call form() %}
+    <h2>{{ _("Blog Details") }}</h2>
+    <dl>
+      {{ form.title.as_dd() }}
+      {{ form.description.as_dd() }}
+      {% if blog.configuration %}
+        {{ form.load_config.as_dd() }}
+      {% endif %}
+      <dt>{{ _('Dump ID') }}</dt>
+      <dd><code>{{ dump_id }}</code><br>
+          <small>{{ _('If you have a special installation and want to '
+                      'rewrite the import programmatically you need this '
+                      'identifier.') }}</small></dd>
+    </dl>
+    <h2>{{ _("Authors") }}</h2>
+    <p>{% trans %}
+      Chose the authors whose posts you want to import.  In the dropdown you
+      can select one of the already existing users if you want to change the
+      author during importing.  In the default settings a new and inactive user
+      without a password is created.
+    {% endtrans %}</p>
+    <ul>
+    {%- for author in blog.authors %}
+      <li>{{ form.authors[author.id]() }} &mdash; {{ author.username|e }}</li>
+    {%- else %}
+      <li><em>{{ _("no author information") }}</em></li>
+    {%- endfor %}
+    </ul>
+    <p>{% trans %}
+      Authors are only converted if at least one of their posts is coverted.
+      So if you unselect all the posts by a user in the list below it doesn't
+      matter what you select here.
+    {% endtrans %}</p>
+    <h2>{{ _("Posts") }}</h2>
+    <p>{% trans %}
+      Posts marked with a blue background are already imported.
+    {% endtrans %}</p>
+    <table class="importable-posts">
+      <tr>
+        <th>{{ _("Date") }}</th>
+        <th>{{ _("Title") }}</th>
+        <th>{{ _("Author") }}</th>
+        <th>{{ _("Comments") }}</th>
+      </tr>
+      {%- for post in blog.posts %}
+      {%- if post.already_imported %}
+      <tr class="already-imported">
+        <td>{{ post.pub_date|datetimeformat|e }}</td>
+        <td>{{ post.title|e }}</td>
+        <td>{{ post.author.username|e }}</td>
+        <td>{{ post.comments|count }}</td>
+      {%- else %}
+      <tr>
+        <td>{{ post.pub_date|datetimeformat|e if post.pub_date
+               else _('unpublished') }}</td>
+        <td>{{ form.posts[post.id].with_help_text() }}</td>
+        <td>{{ post.author.username|e }}</td>
+        <td>{{ form.comments[post.id]() }} <label for="{{
+          form.comments[post.id].id }}">{{ post.comments|count }}</label></td>
+      {% endif %}
+      </tr>
+      {%- endfor %}
+    </table>
+    <div class="actions">
+      <input type="submit" value="{{ _('Import into Blog') }}">
+      <input type="submit" name="delete" value="{{ _('Delete') }}">
+      <input type="submit" name="cancel" value="{{ _('Cancel') }}">
+    </div>
+  {% endcall %}
+{% endblock %}

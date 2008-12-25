@@ -1,0 +1,23 @@
+Server Information
+==================
+
+This folder contains scripts for various deployment types.  Depending
+on the kind of Webserver and Webserver interface you should chose one
+of them or create your own.
+
+The following files exist currently:
+
+`zine.cgi`
+    This file implements can be used to use Zine over CGI.  This
+    should *NOT* be used unless you have to.  Zine is not designed
+    for the run-once nature of CGI and will perform poorly on it.
+
+`zine.fcgi`
+    This file serves Zine over FastCGI.  It requires the flup
+    module for Python.
+
+`zine.wsgi`
+    This file can be used to execute Zine over mod_wsgi.
+
+Just take the file of choice, copy it to where you want it to be and
+adjust it.

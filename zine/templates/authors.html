@@ -1,0 +1,10 @@
+{% extends "layout.html" %}
+{% block title %}{{ _("Authors") }}{% endblock %}
+{% block contents %}
+  <h2>{{ _("Authors") }}</h2>
+  <ul>
+  {%- for user in authors %}
+    <li><a href="{{ url_for(user)|e }}">{{ user.display_name|e }}</a></li>
+  {%- endfor %}
+  </ul>
+{% endblock %}

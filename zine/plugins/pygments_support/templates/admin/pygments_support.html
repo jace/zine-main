@@ -1,0 +1,19 @@
+{% extends "admin/layout.html" %}
+{% block title %}{{ _("Pygments") }}{% endblock %}
+{% block contents %}
+  <h1>{{ _("Pygments") }}</h1>
+  <p>{% trans %}
+    Pygments allows you to select one of many themes for your code tags.
+    You can preview and select one below.
+  {% endtrans %}</p>
+  {{ example }}
+  {%- call form.render() %}
+    {{ form.all_errors() }}
+    <div class="actions">
+      {{ _("Theme") }}:
+      {{ form.style.render() }}
+      <input type="submit" value="{{ _('Preview') }}">
+      <input type="submit" name="apply" value="{{ _('Select') }}">
+    </div>
+  {%- endcall %}
+{% endblock %}

@@ -1,0 +1,15 @@
+{% extends "admin/layout.html" %}
+{% block title %}{{ _("Block Comment") }}{% endblock %}
+{% block contents %}
+  <h1>{{ _("Block Comment") }}</h1>
+  {% call form() %}
+    <div>
+      <p>{% trans comment_author=form.comment.author|e %}
+        Do you really want to block the comment by {{ comment_author }}?
+      {% endtrans %}</p>
+      <p>{{ form.message.label() }}: {{ form.message(size=40) }}</p>
+      <input type="submit" name="cancel" value="{{ _('No') }}">
+      <input type="submit" name="confirm" value="{{ _('Yes') }}">
+    </div>
+  {% endcall %}
+{% endblock %}
